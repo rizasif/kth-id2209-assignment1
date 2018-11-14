@@ -1,10 +1,3 @@
-/**
-* Name: Basic model (prey agents)
-* Author:
-* Description: First part of the tutorial : Predator Prey
-* Tags:
-*/
-
 model festival
 
 global {
@@ -37,7 +30,7 @@ global {
 		create Bank number: 1;
 	}
 	
-	bool challenge1 <- false;
+	bool challenge1 <- true;
 	bool challenge2 <- true;
 	
 	bool creative1 <- true;
@@ -52,7 +45,6 @@ species Guard skills: [moving]{
 	}
 	
 	list<guest> targets <- [];
-	bool pursue <- false;
 	
 	reflex kill when: challenge2 and length(self.targets)>0{
 		point target <- self.targets[0].location;
@@ -116,7 +108,6 @@ species InfoCenter{
 	reflex callSecurity when: challenge2 and report{
 		ask(Guard){
 			add myself.badGuest to: self.targets;
-			self.pursue <- true;
 			write "Pursue!";
 			myself.report <- false;
 		}
@@ -140,8 +131,8 @@ species guest skills: [moving]{
 	int original_hunger <- hunger_level;
 	int original_money <- money_level;
 	
-	int thirst_dec <- rnd(1,10);
-	int hunger_dec <- thirst_dec;
+	int thirst_dec <- rnd(5,15);
+	int hunger_dec <- rnd(1,10);
 	
 	int drunk <- 0;
 	
@@ -160,15 +151,15 @@ species guest skills: [moving]{
 		self.hunger_level <- self.hunger_level - self.hunger_dec;
 	}
 	
-	reflex just_print{
-		write "hunger: " + self.hunger_level + " thirst: " + self.thirst_level + " money: " + self.money_level;
-	}
+//	reflex just_print{
+//		write "hunger: " + self.hunger_level + " thirst: " + self.thirst_level + " money: " + self.money_level;
+//	}
 	
 	reflex moneyTrouble when: creative2 and self.money_level < broke{
 			self.isBroke <- true;
 			self.target <- bank_location;
 			self.color <- #purple;
-			write "I am broke";
+//			write "I am broke";
 			self.dancing <-false;
 			self.isHungry <- false;
 			self.isThirsty <-false;
@@ -180,17 +171,17 @@ species guest skills: [moving]{
 		
 		if thirst_level < thirsty{
 			self.color <- #blue;
-			write "I am thirsty";
+//			write "I am thirsty";
 		} 
 		
 		else if hunger_level < hunger{
 			self.color <- #red;
-			write "I am hungry";
+//			write "I am hungry";
 		}
 		
 		else {
 			do wander;
-			write "I am dancing";
+//			write "I am dancing";
 		}
 		
 	}
@@ -300,7 +291,7 @@ species guest skills: [moving]{
 							if challenge2 and myself.drunk > drunk_threshold{
 								self.badGuest <- myself;
 								self.report <- true;
-								write "bad guest!";
+								write "Bad guest!";
 							}
 							myself.color <- #blue;
 						}
